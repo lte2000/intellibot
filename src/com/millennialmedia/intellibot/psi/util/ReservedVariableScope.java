@@ -221,6 +221,7 @@ public enum ReservedVariableScope {
         if (element == null) {
             // Robot 3.x
             element = PythonResolver.findClass("GlobalVariables", project);
+            // element = PythonResolver.findClass("robot.variables.scopes.GlobalVariables", project);
         }
         return element;
     }

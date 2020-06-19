@@ -97,10 +97,10 @@ public class PythonResolver {
             }
 
             // save last match on full name should qualified name never match
-//            String className = pyClass.getName();
-//            if (className != null && className.equals(name)) {
-//                matchedByName = pyClass;
-//            }
+            String className = pyClass.getName();
+            if (className != null && className.equals(name)) {
+                matchedByName = pyClass;
+            }
         }
         // depending on PYTHONPATH, pyClass.getQualifiedName() may return BuiltIn.BuiltIn or robot.libraries.BuiltIn.BuiltIn,
         if (! name.startsWith("robot.libraries.")) {
@@ -117,6 +117,12 @@ public class PythonResolver {
                     if (qName.equals(name + "." + shortName)) {
                         return pyClass;
                     }
+                }
+
+                // save last match on full name should qualified name never match
+                String className = pyClass.getName();
+                if (className != null && className.equals(name)) {
+                    matchedByName = pyClass;
                 }
             }
         }
