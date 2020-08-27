@@ -79,7 +79,7 @@ public class RobotFileManager {
         //     from the module search path.
         if (! library.contains("/")) {
             debug(library, "Attempting class search", project);
-            result = PythonResolver.findClass(library, project);
+            result = PythonResolver.findClass(library, project, false);
             if (result != null) {
                 addToCache(result, library);
                 return result;
