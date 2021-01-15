@@ -11,6 +11,8 @@ This version of intellibot provide more options, see following picture:
 
 ### NEW FEATURE/ENHANCEMENT/FIX comparing to the original version
 
+* Support Robot Framework 4.0 IF/ELSE syntax
+
 * Support FOR loop, both old and new syntax
 
 * Variable

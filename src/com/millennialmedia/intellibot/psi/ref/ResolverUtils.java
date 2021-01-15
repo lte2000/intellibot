@@ -22,6 +22,7 @@ public class ResolverUtils {
     private ResolverUtils() {
     }
 
+    private static final Pattern IF_ELSE_PATTERN = Pattern.compile("IF|ELSE( IF)?");
     @Nullable
     public static PsiElement resolveKeywordFromFile(@Nullable String keywordText, @Nullable PsiFile file) {
         if (keywordText == null) {
@@ -30,6 +31,8 @@ public class ResolverUtils {
             return null;
         } else if (!(file instanceof RobotFile)) {
             return null;
+        } else if (IF_ELSE_PATTERN.matcher(keywordText).matches()) {
+            keywordText = "Run Keyword If";
         }
         RobotFile robotFile = (RobotFile) file;
         for (DefinedKeyword keyword : robotFile.getDefinedKeywords()) {
