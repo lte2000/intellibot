@@ -249,11 +249,35 @@ public class RobotParser implements PsiParser {
                 parseWith(builder, RobotTokenTypes.ARGUMENT);
             } else if (markType != RobotTokenTypes.VARIABLE_DEFINITION && RobotTokenTypes.VARIABLE_DEFINITION == type) {
                 // we check the first two to see if we are in a new statement; the third handles ... cases
-                if (builder.rawLookup(-1) == RobotTokenTypes.WHITESPACE &&
-                        builder.rawLookup(-2) == RobotTokenTypes.WHITESPACE &&
-                        builder.rawLookup(-3) != RobotTokenTypes.WHITESPACE) {
+//                if (builder.rawLookup(-1) == RobotTokenTypes.WHITESPACE &&
+//                        builder.rawLookup(-2) == RobotTokenTypes.WHITESPACE &&
+//                        builder.rawLookup(-3) != RobotTokenTypes.WHITESPACE) {
+//                    break;
+//                }
+                // also handle new statement after an/multiple empty Ellipsis
+                //    [Arguments]    ${arg1}
+                //    ...
+                //    ...
+                //    ...    ${arg2}=${-1}
+                //    ...    ${arg3}
+                //    ${test}    Set Variable    2222
+                //    [Documentation]
+                //    ...
+                //    ...    document1
+                //    ...
+                //    ...    ${arg3}    is test
+                //    ...
+                //    ...
+                //    ${var1}=    Set Variable    111
+                //    Log    ${var1}    ${arg3}    ${test}
+                //#shold resolve all variable
+
+                int cnt = 0;
+                for (int b=-1; builder.rawLookup(b) == RobotTokenTypes.WHITESPACE; b--)
+                    cnt++;
+                if (cnt % 3 != 1)
                     break;
-                }
+
                 parseVariableDefinitionWithDefaults(builder);
 
             } else {
