@@ -182,8 +182,24 @@ public class RobotFileManager {
     private static PsiFile findFile(@NotNull String original, @NotNull String path, @NotNull String fileName,
                                     @NotNull Project project, @NotNull GlobalSearchScope search,
                                     @NotNull PsiElement originalElement, boolean directory) {
+
+        if (!fileName.contains(".")) {
+            // Skipping import check on a directory import
+            return null;
+        }
+
         debug(original, "path::" + path, project);
         debug(original, (directory ? "directory::" : "file::") + fileName, project);
+
+        String pathString = project.getBasePath();
+        debug(original, "basePath::" + pathString, project);
+
+        // Find all occurrences of ${EXECDIR} variable strings in resource import path and replace with absolute path
+        String regex = "\\$\\{EXECDIR\\}";
+        if (pathString != null) {
+            path = path.replaceAll(regex, pathString);
+        }
+        debug(original, "newpath::" + path, project);
 
         if (path.contains("./")) {
             // contains a relative path
@@ -197,6 +213,7 @@ public class RobotFileManager {
                 }
             }
         }
+
         path = path + fileName;
 
         Collection<VirtualFile> files = FilenameIndex.getVirtualFilesByName(project, fileName, search);
