@@ -9,6 +9,7 @@ import com.intellij.psi.PsiManager;
 import com.intellij.psi.search.FilenameIndex;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.ProjectScope;
+import com.intellij.psi.util.QualifiedName;
 import com.jetbrains.python.psi.PyFile;
 import com.jetbrains.python.psi.stubs.PyModuleNameIndex;
 import com.millennialmedia.intellibot.ide.config.RobotOptionsProvider;
@@ -84,8 +85,12 @@ public class RobotFileManager {
                 addToCache(result, library);
                 return result;
             }
-            debug(library, "Attemping module search", project);
-            List<PyFile> results = PyModuleNameIndex.find(library, project, true);
+            debug(library, "Attempting module search", project);
+            List<PyFile> results = PyModuleNameIndex.findByQualifiedName(
+                    QualifiedName.fromDottedString(library),
+                    project,
+                    GlobalSearchScope.projectScope(project)
+            );
             if (! results.isEmpty()) {
                 result = (PsiFile)results.get(0);
                 addToCache(result, library);
