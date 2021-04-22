@@ -1,5 +1,6 @@
 package com.millennialmedia.intellibot.psi.ref;
 
+import com.intellij.openapi.project.Project;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -33,9 +34,9 @@ public class RobotFileManagerTest {
     @Test
     public void testGetFilename() {
         try {
-            Method method = RobotFileManager.class.getDeclaredMethod("getFilename", String.class, String.class);
+            Method method = RobotFileManager.class.getDeclaredMethod("getFilename", String.class, String.class, Project.class);
             method.setAccessible(true);
-            String[] actual = (String[]) method.invoke(null, this.path, this.suffix);
+            String[] actual = (String[]) method.invoke(null, this.path, this.suffix, null);
             assertNotNull(actual);
             assertEquals(2, actual.length);
             assertEquals(this.expected[0], actual[0]);

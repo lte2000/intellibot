@@ -9,6 +9,7 @@ import com.intellij.psi.PsiManager;
 import com.intellij.psi.search.FilenameIndex;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.ProjectScope;
+import com.intellij.psi.util.QualifiedName;
 import com.jetbrains.python.psi.PyFile;
 import com.jetbrains.python.psi.stubs.PyModuleNameIndex;
 import com.millennialmedia.intellibot.ide.config.RobotOptionsProvider;
@@ -77,7 +78,7 @@ public class RobotFileManager {
         //     like it has been done in all the examples in this section. In these cases
         //     Robot Framework tries to find the class or module implementing the library
         //     from the module search path.
-        if (! library.contains("/")) {
+        if (!library.contains("/")) {
             debug(library, "Attempting class search", project);
             result = PythonResolver.findClass(library, project, false);
             if (result != null) {
@@ -85,7 +86,11 @@ public class RobotFileManager {
                 return result;
             }
             debug(library, "Attemping module search", project);
-            List<PyFile> results = PyModuleNameIndex.find(library, project, true);
+            List<PyFile> results = PyModuleNameIndex.findByQualifiedName(
+                    QualifiedName.fromDottedString(library),
+                    project,
+                    GlobalSearchScope.projectScope(project)
+            );
             if (! results.isEmpty()) {
                 result = (PsiFile)results.get(0);
                 addToCache(result, library);
@@ -270,7 +275,7 @@ public class RobotFileManager {
     }
 
     @NotNull
-    private static String[] getFilename(@NotNull String path, @NotNull String suffix, @NotNull Project project) {
+    private static String[] getFilename(@NotNull String path, @NotNull String suffix, Project project) {
         // support either / or ${/}
         String[] pathElements = path.split("(\\$\\{)?/(})?");
         String result;
@@ -281,7 +286,7 @@ public class RobotFileManager {
         // absolute or relative path
         if (! results[0].matches("([a-zA-Z]:)?/.*|.*([$%]\\{.+}).*") && ! results[0].contains("./"))
             results[0] = "./" + results[0];
-        if (RobotOptionsProvider.getInstance(project).stripVariableInLibraryPath()) {
+        if (project != null && RobotOptionsProvider.getInstance(project).stripVariableInLibraryPath()) {
             results[0] = results[0].replaceAll("[$%]\\{|}", "");
         }
         if (!suffix.equals("") && !result.toLowerCase().endsWith(suffix.toLowerCase())) {

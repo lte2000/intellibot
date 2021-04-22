@@ -13,6 +13,8 @@ public class ResourceLoader {
 
     public static String getResourcePath(String path) {
         URL resource = ResourceLoader.class.getClassLoader().getResource(path);
-        return resource == null ? null : resource.getFile();
+        var f = resource == null ? null : resource.getFile();
+        if (f == null) return f;
+        return System.getProperty( "os.name" ).contains( "indow" ) ? f.substring(1) : f;
     }
 }

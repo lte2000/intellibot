@@ -10,7 +10,7 @@ import com.millennialmedia.intellibot.ResourceLoader;
  */
 public abstract class AbstractRobotIdeTest extends LightPlatformCodeInsightFixtureTestCase {
 
-    protected final String getTestFile() {
+    protected final String  getTestFile() {
         return String.format("%s%s.robot", getTestDataPath(), getTestName(true));
     }
 
