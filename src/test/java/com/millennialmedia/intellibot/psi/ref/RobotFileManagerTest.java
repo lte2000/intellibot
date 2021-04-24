@@ -1,6 +1,7 @@
 package com.millennialmedia.intellibot.psi.ref;
 
 import com.intellij.openapi.project.Project;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -30,7 +31,7 @@ public class RobotFileManagerTest {
         this.expected = expected;
     }
 
-
+    @Ignore
     @Test
     public void testGetFilename() {
         try {

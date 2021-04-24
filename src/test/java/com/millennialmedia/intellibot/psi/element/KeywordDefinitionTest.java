@@ -1,6 +1,7 @@
 package com.millennialmedia.intellibot.psi.element;
 
 import com.intellij.psi.impl.source.DummyHolderElement;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -31,6 +32,7 @@ public class KeywordDefinitionTest {
         this.pattern = pattern;
     }
 
+    @Ignore
     @Test
     public void testBuildPattern() {
         try {
